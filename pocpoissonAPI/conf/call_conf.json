@@ -1,0 +1,34 @@
+{
+  "level_conf_path_fromscript": {
+    "description": "Configuration file path for difficulty levels, relative path from python script directory",
+    "value": "../conf/level_quest.json"
+  },
+  "expert_xlsx_path_fromscript": {
+    "description": "Path to the XLSX file with distance between fixh species (given by the experts), relative path from python script directory",
+    "value": "../resources/Tab_especes_20230616.xlsx"
+  },
+  "output_generated_path_fromscript": {
+    "description": "Output directory for regeneration of output resources such as images catalog and pre-computed combinations, relative path from python script directory",
+    "value": "../resourcesGenerated"
+  },
+  "img_file_path": {
+    "description": "Storage path of images, used to fill the catalog, relative path from python script directory",
+    "value": "../../pocpoisson/img/"
+  },
+  "char_xlsx_file_path": {
+    "description": "XLSX path of species characteristics, relative path from python script directory",
+    "value": "../resources/referentiel_ssp.xlsx"
+  },
+  "img_ssp_url": {
+    "description": "URL of images from internet (provided by the API)",
+    "value": "https://annumenv.ofb.fr/pocpoisson/img/"
+  },
+  "json_file_outputpath": {
+    "description": "Export path for catalog, JSON, relative path from python script directory",
+    "value": "../resourcesGenerated/ssp_url.json"
+  },
+  "txt_file_outputpath": {
+    "description": "Export path for catalog, JSON TEXT VERSION, relative path from python script directory",
+    "value": "../resourcesGenerated/ssp_url.txt"
+  }
+}

@@ -1,0 +1,133 @@
+{
+	"easy": {
+		"target_dist" : 22,
+		"min_dist" : 2,
+		"max_dist" : 100,
+		"profiles" : {
+			"basic" : [20, 19, 18, 20, 21, 22, 23, 22, 21, 20],
+			"head-on" : [18, 19, 17, 19, 20, 21, 20, 22, 23, 21],
+			"finisher" : [24, 24, 24, 24, 23, 22, 20, 17, 15, 10],
+			"easy" : [22, 23, 24, 25, 23, 24, 22, 20, 22, 21],
+			"hard" : [17, 16, 15, 17, 16, 18, 19, 16, 15, 18]
+		},
+		"species" : [
+				{"fishCode":"ANG", "ponderation":1},
+				{"fishCode":"BRO", "ponderation":1},
+				{"fishCode":"CCO", "ponderation":1},
+				{"fishCode":"CHA", "ponderation":1},
+				{"fishCode":"EPI", "ponderation":1},
+				{"fishCode":"GOU", "ponderation":1},
+				{"fishCode":"GAR", "ponderation":1},
+				{"fishCode":"LOF", "ponderation":1},
+				{"fishCode":"PCH", "ponderation":1},
+				{"fishCode":"PER", "ponderation":1},
+				{"fishCode":"TAN", "ponderation":1},
+				{"fishCode":"TRF", "ponderation":1},
+				{"fishCode":"VAI", "ponderation":1}
+
+]
+	},
+	"medium":{
+		"target_dist" : 15,
+		"min_dist" : 3,
+		"max_dist" : 10,
+		"profiles" : {
+			"basic" : [15,17,16,13,14,19,18,17,15,16],
+			"head-on" : [12,13,14,12,15,16,17,18,17,19],
+			"finisher" : [24,20,18,16,15,14,12,11,10,9],
+			"easy" : [18,20,19,18,20,17,15,16,17,19],
+			"hard" : [12,13,14,12,14,13,12,12,13,14]
+		},
+		"species" : [
+				{"fishCode":"PAP", "ponderation":1},
+				{"fishCode":"GAH", "ponderation":1},
+				{"fishCode":"SAT", "ponderation":1},
+				{"fishCode":"EPT", "ponderation":1},
+				{"fishCode":"LPM", "ponderation":1},
+				{"fishCode":"BLN", "ponderation":1},
+				{"fishCode":"CAG", "ponderation":1},
+				{"fishCode":"EPI", "ponderation":1},
+				{"fishCode":"BRE", "ponderation":1},
+				{"fishCode":"TOX", "ponderation":1},
+				{"fishCode":"HOT", "ponderation":1},
+				{"fishCode":"TAN", "ponderation":1},
+				{"fishCode":"CCO", "ponderation":1},
+				{"fishCode":"VAR", "ponderation":1},
+				{"fishCode":"GRE", "ponderation":1},
+				{"fishCode":"BRB", "ponderation":1},
+				{"fishCode":"BRO", "ponderation":1},
+				{"fishCode":"VAN", "ponderation":1},
+				{"fishCode":"ROT", "ponderation":1},
+				{"fishCode":"PSR", "ponderation":1},
+				{"fishCode":"SIL", "ponderation":1},
+				{"fishCode":"SPI", "ponderation":1},
+				{"fishCode":"BOU", "ponderation":1},
+				{"fishCode":"PES", "ponderation":1},
+				{"fishCode":"CHA", "ponderation":1},
+				{"fishCode":"LPP", "ponderation":1},
+				{"fishCode":"PER", "ponderation":1},
+				{"fishCode":"ABL", "ponderation":1},
+				{"fishCode":"BAF", "ponderation":1},
+				{"fishCode":"ANG", "ponderation":1},
+				{"fishCode":"TRF", "ponderation":1},
+				{"fishCode":"GAR", "ponderation":1},
+				{"fishCode":"LOF", "ponderation":1},
+				{"fishCode":"VAI", "ponderation":1},
+				{"fishCode":"CHE", "ponderation":1},
+				{"fishCode":"GOU", "ponderation":1}
+	
+		]
+	},
+	"expert":{
+		"target_dist" : 7,
+		"min_dist" : 0,
+		"max_dist" : 10,
+		"profiles" : {
+			"basic" : [8,9,10,7,11,12,9,8,9,8],
+			"head-on" : [5,4,6,8,11,10,11,10,9,9],
+			"finisher" : [10,11,9,9,7,6,8,6,5,4],
+			"easy" : [10,11,12,10,12,11,12,10,10,11],
+			"hard" : [3,5,3,5,6,7,6,5,5,4]
+		},
+		"species" : [
+				{"fishCode":"PAP", "ponderation":1},
+				{"fishCode":"GAH", "ponderation":1},
+				{"fishCode":"SAT", "ponderation":1},
+				{"fishCode":"EPT", "ponderation":1},
+				{"fishCode":"LPM", "ponderation":1},
+				{"fishCode":"BLN", "ponderation":1},
+				{"fishCode":"CAG", "ponderation":1},
+				{"fishCode":"EPI", "ponderation":1},
+				{"fishCode":"BRE", "ponderation":1},
+				{"fishCode":"TOX", "ponderation":1},
+				{"fishCode":"HOT", "ponderation":1},
+				{"fishCode":"TAN", "ponderation":1},
+				{"fishCode":"CCO", "ponderation":1},
+				{"fishCode":"VAR", "ponderation":1},
+				{"fishCode":"GRE", "ponderation":1},
+				{"fishCode":"BRB", "ponderation":1},
+				{"fishCode":"BRO", "ponderation":1},
+				{"fishCode":"VAN", "ponderation":1},
+				{"fishCode":"ROT", "ponderation":1},
+				{"fishCode":"PSR", "ponderation":1},
+				{"fishCode":"SIL", "ponderation":1},
+				{"fishCode":"SPI", "ponderation":1},
+				{"fishCode":"BOU", "ponderation":1},
+				{"fishCode":"PES", "ponderation":1},
+				{"fishCode":"CHA", "ponderation":1},
+				{"fishCode":"LPP", "ponderation":1},
+				{"fishCode":"PER", "ponderation":1},
+				{"fishCode":"ABL", "ponderation":1},
+				{"fishCode":"BAF", "ponderation":1},
+				{"fishCode":"ANG", "ponderation":1},
+				{"fishCode":"TRF", "ponderation":1},
+				{"fishCode":"GAR", "ponderation":1},
+				{"fishCode":"LOF", "ponderation":1},
+				{"fishCode":"VAI", "ponderation":1},
+				{"fishCode":"CHE", "ponderation":1},
+				{"fishCode":"GOU", "ponderation":1}
+
+		]
+	}
+	
+}

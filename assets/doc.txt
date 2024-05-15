@@ -1,0 +1,233 @@
+Environnement de travail
+https://mydomainX.XXX/pocpoissonapi/api/
+Catalogue de photos
+https://mydomainX.XXX/pocpoissonapi/api/ssp_url.json
+Matrice des distances entre espèces
+https://mydomainX.XXX/pocpoissonapi/api/dist.json
+Configuration de l'algorithme de génération des questions
+https://mydomainX.XXX/pocpoissonapi/api/level_quest.json
+
+POC reconnaissance Poissons
+Liste des ressources mises à disposition par l'OFB
+14/08/2023 alexandre.liccardi@ofb.gouv.fr
+
+*** APIS
+
+*** *** Erreurs communes (explicites) - MàJ Format RFC
+401, $detail = "Parameter mat_id is missing."
+401, $detail = "Parameter key is missing."
+401, $detail = "API key is not valid."
+401, $detail = "Existing user."
+402, $detail = "Unable to identify the user."
+503, $detail = "Unable to modify the user."
+
+https://mydomainX.XXX/pocpoissonapi/api/10questions
+Produit : 
+Une liste de paramétrages permettant la constitution d'une série de 10 questions, tirées en mode simili aléatoire par rapport à des contraintes de difficulté fixées par un niveau et un profil.
+L'enregistrement n'est pas par défaut, il s'effectue via un appel à https://mydomainX.XXX/pocpoissonapi/api/savequestion.
+
+Paramètres entrants (POST et GET) :
+*** *** si pas de SESSION activée (utilisateur non identifié) :
+- mat_id - varchar(64): un identifiant unique d'utilisateur, possiblement identifiant matériel
+- key - varchar(64) : mot de passe associé à l'utilisateur - pour les besoin du POC, 'XXXXXXX' est fonctionnel par défaut
+*** *** Paramètres obligatoires :
+- level - varchar(64) : niveau de difficulté général atteint par le joueur. Valeurs possibles : "easy", "medium", "expert".
+*** *** Paramètres facultatifs :
+- profile - varchar(64) : type de série de question, "profil". Comparable à l'évolution du dénivelé d'une course cycliste : plus dur au début, à la fin etc. Valeurs possibles : "basic", "head-on", "finisher", "easy", "hard". Valeur par défaut : "basic".
+
+Retour :
+Retourne un json vide ("{}") ou l'erreur si faisant partie des erreurs communes listées plus haut en cas d'erreur. Sinon :
+- level : niveau sollicité
+- profile : profil sollicité
+- missing_questions : 'True' si moins de 10 questions ont pu être générées, par défaut de photographies disponibles. 'False' si aucune erreur.
+- questions : liste pour chacune des 10 questions :
+- questions.combinaison : trois espèces (doublons autorisés) retenues pour la question, dites "challengers". Ne porte pas l'espèce référence.
+- questions.nb_url_min : parmi les trois espèces retenues, nombres de photographies disponibles le plus faible.
+- questions.fishCode_reference : code à 3 lettres de l'espèce référence (à trouver) 
+- questions.min_dist : indice de distance entre l'espèce référence (à trouver) et l'espèce la plus proche (difficile à distinguer / ressemblante).
+- questions.max_dist : indice de distance entre l'espèce référence (à trouver) et l'espèce la moins proche (facile à distinguer).
+- questions.target_dist : somme des distances entre chaque espèce de la combinaison et l'espèce référence attendue, demandée par le profil.
+- questions.used_dist : somme des distances entre chaque espèce de la combinaison et l'espèce référence attendue, réellement retenue par l'algorithme. L'algorithme cherche "autour" de la distance, par incrément de 1, avec une tolérance à ixer (par défaut, de 5 points d'indice). Plus cette valeur diffère de target_dist, moins le profil a pu être respecté au vu des photographies disponibles. A considérer comme un indice de qualité de la série de questions proposée, par rapport au niveau et au profil attendu.
+- questions.valid : 'True' si l'algorithme a réussi à générer une question dans les conditions de distance entre espèces et de disponibilités des photographies. 'False' si échec.
+- questions.cause : Raison de l'échec de génération de la question par l'algorithme (si questions.valid == True), nobre de tentatives qui ont été nécessaires sinon.
+- questions.order : numéro de la question parmi les 10 générées
+- questions.reference : dictionnaire json pour la description de l'espèce référence (à trouver) - description dans questions.{reference|fishCode_challenger_{1|2|3}}
+- questions.fishCode_challenger_1 : dictionnaire json pour la description de l'espèce dite "challenger" en 1
+- questions.fishCode_challenger_2 : dictionnaire json pour la description de l'espèce dite "challenger" en 2
+- questions.fishCode_challenger_3 : dictionnaire json pour la description de l'espèce dite "challenger" en 3
+- questions.{reference|fishCode_challenger_{1|2|3}}.fishCode : code à 3 lettres pour l'espèce 
+- questions.{reference|fishCode_challenger_{1|2|3}}.pic_url : URL vers une image pseudo-aléatoire
+- questions.{reference|fishCode_challenger_{1|2|3}}.inpn : URL vers la page de description de l'espèce sur le site INPN 
+- questions.{reference|fishCode_challenger_{1|2|3}}.fishName : Nom commun de l'espèce
+- questions.{reference|fishCode_challenger_{1|2|3}}.fishNameScientific : Nom scientifique (latin) de l'espèce
+
+Exemple :
+https://mydomainX.XXX/pocpoissonapi/api/10questions?level=expert (SESSION active)
+https://mydomainX.XXX/pocpoissonapi/api/10questions?level=expert&mat_id=15&key=XXXXXXX (SESSION non active)
+____________
+
+https://mydomainX.XXX/pocpoissonapi/api/addscore
+Produit : 
+Le score en cours, pour l'utilisateur actuel, un nouveau score à partir de la demande d'ajout (addition).
+
+Paramètres entrants (POST et GET) :
+*** *** si pas de SESSION activée (utilisateur non identifié) :
+- mat_id - varchar(64): un identifiant unique d'utilisateur, possiblement identifiant matériel
+- key - varchar(64) : mot de passe associé à l'utilisateur - pour les besoin du POC, 'XXXXXXX' est fonctionnel par défaut
+*** *** Paramètres obligatoires :
+- addscore - integer : score à ajouter au score actuel
+
+Retour :
+Retourne un json vide ("{}") ou l'erreur si faisant partie des erreurs communes listées plus haut en cas d'erreur. Sinon :
+- previous_score : précédent score
+- new_score : nouveau score (égal à previous_score + addscore)
+
+Exemple :
+https://mydomainX.XXX/pocpoissonapi/api/addscore?addscore=110 (SESSION active)
+https://mydomainX.XXX/pocpoissonapi/api/addscore?addscore=110&mat_id=15&key=XXXXXXX (SESSION non active)
+____________
+
+https://mydomainX.XXX/pocpoissonapi/api/score
+Produit : 
+Le score en cours, pour l'utilisateur actuel.
+
+Paramètres entrants (POST et GET) :
+*** *** si pas de SESSION activée (utilisateur non identifié) :
+- mat_id - varchar(64): un identifiant unique d'utilisateur, possiblement identifiant matériel. Si fourni, tente une connexion à la SESSION (et détruit la précédente si nécessaire).
+- key - varchar(64) : mot de passe associé à l'utilisateur - pour les besoin du POC, 'XXXXXXX' est fonctionnel par défaut
+
+Retour :
+- score : score en cours pour l'utilisateur authentifié
+
+Exemple :
+https://mydomainX.XXX/pocpoissonapi/api/score (SESSION active)
+https://mydomainX.XXX/pocpoissonapi/api/score?mat_id=15&key=XXXXXXX (SESSION non active)
+____________
+
+https://mydomainX.XXX/pocpoissonapi/api/questions
+Produit : 
+La liste des questions qui ont été adressées au joueur authentifié. Dans une API complète, à faire correspondre aux enregistrement des retour de l'API 10questions adressés au joueur.
+
+Paramètres entrants (POST et GET) :
+*** *** si pas de SESSION activée (utilisateur non identifié) :
+- mat_id - varchar(64): un identifiant unique d'utilisateur, possiblement identifiant matériel. Si fourni, tente une connexion à la SESSION (et détruit la précédente si nécessaire).
+- key - varchar(64) : mot de passe associé à l'utilisateur - pour les besoin du POC, 'XXXXXXX' est fonctionnel par défaut
+
+Retour :
+Retourne un json vide ("{}") ou l'erreur si faisant partie des erreurs communes listées plus haut en cas d'erreur. Sinon :
+Liste de JSON, sous forme :
+- id_series : identifiant unique de la série (bigint)
+- score : nombre de points marqués par le joueur
+- mat_id : identifiant unique du joueur
+- estimated_difficulty : indice de difficulté de la série de question (typiquement, somme de distances)
+- level : niveau associé à la série. Valeurs possibles : "easy", "medium", "expert".
+- profile : profil associé à la série. Type de série de question, "profil". Comparable à l'évolution du dénivelé d'une course cycliste : plus dur au début, à la fin etc. Valeurs possibles : "basic", "head-on", "finisher", "easy", "hard". 
+- content : contenu de la série de questions, devrait correspondre à un retour de l'API 10questions. 
+- created_at : timestap de génération de la série.
+
+Exemple :
+https://mydomainX.XXX/pocpoissonapi/api/questions (SESSION active)
+https://mydomainX.XXX/pocpoissonapi/api/questions?mat_id=15&key=XXXXXXX (SESSION non active)
+
+____________
+
+https://mydomainX.XXX/pocpoissonapi/api/savequestion
+
+Produit : 
+Enregistre une question adressée à l'utilisateur. Retourne l'identifiant de la question créée.
+
+Paramètres entrants (POST et GET) :
+*** *** si pas de SESSION activée (utilisateur non identifié) :
+- mat_id - varchar(64): un identifiant unique d'utilisateur, possiblement identifiant matériel. Si fourni, tente une connexion à la SESSION (et détruit la précédente si nécessaire).
+- key - varchar(64) : mot de passe associé à l'utilisateur - pour les besoin du POC, 'XXXXXXX' est fonctionnel par défaut
+
+Paramètres entrants (POST et GET) :
+*** *** Paramètres facultatifs :
+- content : contenu de la série de question, en json
+- userscore : score de l'utilisateur pour la série
+- difficulty : indice de difficulté estimé, integer. TYpiquement : somme des distances.
+- level : niveau associé à la série. Valeurs possibles : "easy", "medium", "expert".
+- profile : profile : profil associé à la série. Type de série de question, "profil". Comparable à l'évolution du dénivelé d'une course cycliste : plus dur au début, à la fin etc. Valeurs possibles : "basic", "head-on", "finisher", "easy", "hard". 
+
+Retour :
+Retourne un json vide ("{}") ou l'erreur si faisant partie des erreurs communes listées plus haut en cas d'erreur. Sinon :
+- id_series : identifiant unique de la question créé.
+
+https://mydomainX.XXX/pocpoissonapi/api/savequestion?userscore=101&level=expert&profile=basic&difficulty=12 (SESSION active)
+https://mydomainX.XXX/pocpoissonapi/api/savequestion?userscore=101&level=expert&profile=basic&difficulty=12&mat_id=15&key=XXXXXXX (SESSION non active)
+
+____________
+
+https://mydomainX.XXX/pocpoissonapi/api/createuser
+Produit : 
+Créée un nouvel utilisaeur, avec l'id_mat fourni en paramètre comme identifiant unique.
+Déconnecte (détruit) la session en cours.
+
+Paramètres entrants (POST et GET) :
+*** *** Paramètres OBLIGATOIRES :
+- mat_id - varchar(64): un identifiant unique d'utilisateur, possiblement identifiant matériel. Si fourni, tente une connexion à la SESSION (et détruit la précédente si nécessaire).
+- key - varchar(64) : clé d'API pour enregistrement - pour les besoin du POC, 'XXXXXXX' est fonctionnel par défaut
+
+Retour :
+Retourne un json descripteur de l'erreur ("{"erreur" : "..." }") en cas d'erreur. Sinon :
+- mat_id : identifiant unique de l'utilisateur créé.
+
+https://mydomainX.XXX/pocpoissonapi/api/createuser?mat_id=15&key=XXXXXXX
+
+____________
+
+
+https://mydomainX.XXX/pocpoissonapi/api/deco
+Produit :
+API pour déconnecter l'utilisateur, notamment si les varaibles de session sont surchargées. 
+
+____________
+
+https://mydomainX.XXX/pocpoissonapi/api/connect?mat_id=101&key=XXXXXXX
+Produit :
+API pour réinitialiser la connexion de l'utiliateur. Si les paramètres de reconnection identifiant / mot de passe sont fournis, déconnecte la précédente connexion et retente une reconnexion.
+
+Paramètres entrants (POST et GET) :
+*** *** Paramètres OBLIGATOIRES :
+- mat_id - varchar(64): un identifiant unique d'utilisateur, possiblement identifiant matériel. Si fourni, tente une connexion à la SESSION (et détruit la précédente si nécessaire).
+- key - varchar(64) : clé d'API pour enregistrement - pour les besoin du POC, 'XXXXXXX' est fonctionnel par défaut
+
+Retour :
+Descripteur texte explicite.
+
+Exemple :
+https://mydomainX.XXX/pocpoissonapi/api/connect?mat_id=15&key=XXXXXXX
+
+*** Photographies
+
+Répertoire de dépôt des photos : https://mydomainX.XXX/pocpoisson/photos/
+Catalogue par espèce des photos accessibles : https://mydomainX.XXX/pocpoissonapi/api/ssp_url.json ou https://mydomainX.XXX/pocpoissonapi/api/ssp_url.txt
+
+*** Configurations
+
+Niveaux de difficultés : https://mydomainX.XXX/pocpoissonapi/api/level_quest.json
+
+
+*** Exemple en série pour un joueur (SYNOPSIS)
+NB : MODIFIER le paramètre "mat_id" (ici 11001), sinon erreur car existant
+²
+CREATION
+https://mydomainX.XXX/pocpoissonapi/api/createuser?mat_id=11001&key=XXXXXXX
+
+RECUPERATION D'UNE QUESTION
+https://mydomainX.XXX/pocpoissonapi/api/10questions?level=easy
+
+ENREGISTREMENT DE LA QUESTION
+https://mydomainX.XXX/pocpoissonapi/api/savequestion?userscore=1001&level=easy&profile=basic&difficulty=12 
+NB. Le JSON fourni par "10questions" n'est pas enregistré ici, car il serait plus judicieux d'en préciser le besoin pour un éventuel formulaire.
+
+MISE A JOUR DU SCORE
+https://mydomainX.XXX/pocpoissonapi/api/addscore?addscore=1001 
+
+RECUPERATION DU NOUVEAU SCORE
+https://mydomainX.XXX/pocpoissonapi/api/score
+
+RECUPERATION DE TOUTES LES QUESTIONS
+https://mydomainX.XXX/pocpoissonapi/api/questions
+
+NB. Le test ultérieur de l'appel https://mydomainX.XXX/pocpoissonapi/api/savequestion?mat_id=1000002&key=XXXXXXX déconnecte le précédent utilisateur 11001 et renvoie le résultat pour l'utilisateur 1000002 si l'identification réussi.
